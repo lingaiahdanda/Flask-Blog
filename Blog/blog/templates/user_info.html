@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% block content%}
+    <div class="content-section">
+        <div class="media">
+            <img src={{ image_file }} class="rounded-circle account-img">
+            <div class="media-body">
+                <h2>{{ post.user.username }}</h2>
+                <p>{{ post.user.email }}</p>
+            </div>
+        </div>
+    </div>
+    <div>
+        <h2><span class="badge badge-info">posts</span></h2>
+    </div>
+    {% for post in post.user.posts %}
+        <article class="media content-section">
+            <!-- <img src="{{ url_for('static',filename='profile_pics/'+post.user.image_file)}}" alt="" class="rounded-circle article-img"> -->
+            <div class="media-body">
+                <div class="article-metadata">
+                    <small class="text-muted">{{ post.date_posted }}</small>
+                </div>  
+            <h2><a class="article-title" href="{{ url_for('posts.post',post_id=post.id)}}">{{ post.title }}</a></h2> 
+                
+            </div>
+        </article>
+    {% endfor %}
+{% endblock content %}

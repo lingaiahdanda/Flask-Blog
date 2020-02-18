@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+{% block content%}
+<article class="media content-section">
+    <img src="{{ url_for('static',filename='profile_pics/'+post.user.image_file)}}" alt="" class="rounded-circle article-img">
+    <div class="media-body">
+        <div class="article-metadata">
+            <a class="mr-2 mt-2" href="{{ url_for('posts.user_info',post_id=post.id)}}"class="btn btn-secondary btn-sm ml-2">{{ post.user.username }}</a>
+            <small class="text-muted">{{ post.date_posted }}</small>
+            {% if post.user==current_user %}
+                <a href="{{ url_for('posts.update_post',post_id=post.id)}}" class="btn btn-secondary btn-sm m-2">Update</a>
+                <a href="{{ url_for('posts.delete_post',post_id=post.id)}}" onclick="return confirm('Are you sure you want to delete this item?');" class="btn btn-danger btn-sm m-2">Delete</a>
+            {% endif %}
+        </div>  
+        <span class="badge badge-info">Title</span><h2 class="article-title">{{ post.title }}</h2>
+        <span class="badge badge-info">Content</span>
+        <p class="article-content">{{ post.content }}</p>
+        <h5><span class="badge badge-info">Comments</span></h5>
+        <hr>
+        <div class="content-section">
+            {% for comment in post.comments %}
+                <div class="media">
+                    <img src={{ image_file }} class="rounded account-image">
+                    <div class="media-body">
+                        <a class="mr-2 mt-2" href="{{ url_for('posts.user_info',post_id=post.id)}}"class="btn btn-secondary btn-sm ml-2">{{ comment.user.username }}</a>
+                        <p>{{ comment.text }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div>
+        <hr>
+        {% if current_user.is_authenticated %}
+            <div class="content-section">
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom">Leave a Comment</legend>
+                        <div class="form-group">
+                            {{ form.text.label(class="form-control-label") }}
+                            {% if form.text.errors %}
+                                {{ form.text(class="form-control is-invalid") }}   
+                                <div class="invalid-feedback">
+                                    {% for error in form.email.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.text(class="form-control") }}
+                            {% endif %}
+                        </div>
+                    </fieldset>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                </form>
+            </div>
+        {% else %}
+            <small>Login to Leave a Comment</small>
+        {% endif %}
+    </div>
+</article>
+{% endblock content %}
+
+    
+
+
